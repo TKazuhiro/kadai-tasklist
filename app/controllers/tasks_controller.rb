@@ -1,4 +1,7 @@
 class TasksController < ApplicationController
+  before_action :require_user_logged_in
+  before_action :correct_user, only: [:destroy]
+  
   def index
     @tasks = Task.all
   end
@@ -13,6 +16,7 @@ class TasksController < ApplicationController
   
   def create
     @task = Task.new(task_params)
+    @task.user = current_user
     
     if @task.save
       flash[:success] = "Task が正常に投稿されました"
